@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)http://resie.ppparticularity.com/features.php -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<title>Features | elemind, web solutions</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<meta content="" name="description">
+<meta content="elemind.com" name="author">
+
+<link href="./About_files/style.css" rel="stylesheet">
+<script src="./About_files/modernizr.min.js" style=""></script>
+</head>
+<body class="about" data-spy="scroll" data-target=".documentation-nav">
+    <div class="container">
+        <div class="row">
+
+            <!-- .................................... $header .................................... -->
+            <header class="span3">
+                <div class="affix">
+                    <div class="navbar span3">
+                        <div class="navbar-inner">
+                            <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
+                                <i class="icon-reorder"></i>
+                            </a>
+                            <a class="brand span2" href="index.html">
+                                <img alt="" src="./img/logo.png">
+                            </a>
+                            <nav class="nav-collapse collapse">
+                                <ul class="nav">
+                                    <li class="nav-home"><a href="index.html">Home</a></li>
+
+                                    <li class="dropdown nav-portfolio">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="./About_files/About.html">
+                                            Usage example
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="nav-portfolio-2 "><a href="ChatUsage.html">Chat tutorial</a></li>
+                                            <li class="nav-portfolio-3"><a href="VideoUsage.html">Video tutorial</a></li>
+                                        </ul>
+                                    </li>
+                                    
+                                    <li class="dropdown nav-portfolio">
+                                        <a class="dropdown-toggle" data-toggle="dropdown" href="./About_files/About.html">
+                                            Demo
+                                            <b class="caret"></b>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li class="nav-portfolio-2"><a href="ChatDemo.html">Chat </a></li>
+                                            <li class="nav-portfolio-3"><a href="VideoDemo.html">Video </a></li>
+                                        </ul>
+                                    </li>
+
+                                    <li class="nav-home active"><a href="API.html">API</a></li>
+
+                                </ul>
+                            </nav>
+                        </div><!-- /navbar-inner -->
+                    </div><!-- /navbar -->
+                </div><!-- /affix -->
+            </header>
+
+            <div class="main span9">
+
+                <!-- .................................... $Content .................................... -->
+                <section class="section-content">
+                    <div class="row">
+                        <div class="span3 documentation-nav affix hidden-phone">
+                            <ul class="nav nav-pills nav-stacked">
+                                <li><a href="#section-chatwidget">
+                                    <i class="icon-angle-right pull-right"></i>
+                                    ChatWidget
+                                </a></li>
+                                <li><a href="#section-videoWidget">
+                                    <i class="icon-angle-right pull-right"></i>
+                                    VideoWidget
+                                </a></li>
+                                <li class="active"><a href="#section-rtcstar">
+                                    <i class="icon-angle-right pull-right"></i>
+                                    RTCStar
+                                </a></li>
+                            </ul>
+                        </div>
+                        <div class="span6 offset3">
+                            <h2 class="section-title">
+                                API References
+                                <small>
+                                    Post any issues about the API at github <a href="https://github.com/khankuan/RTCStarJS/issues">issue tracker </a> 
+                                </small>
+                            </h2>
+
+                            <!-- .................................... $HTML5 CSS3 .................................... -->
+                            <section class="section-content section-chatwidget" id="section-chatwidget">
+                                <h3 class="section-title">
+                                    <b>ChatWidgetServer</b>
+                                </h3>
+                                <p>
+                                    Chat Widget user only require knowledge of chat widget client API
+                                </p>
+
+                            </br></br>
+
+                            <h3 class="section-title">
+                               <b> ChatWidgetClient</b>
+                            </h3>
+                            <p>
+                                Broadcast a message to all peers connected to the same rtcstarserver. 
+                                <precode> .sendChat(message) </precode>
+                            </p>
+
+                            <p>
+                                Handler to handle message that was broadcasted to you
+                                <precode> .onMessage(function(message){ </br>
+                                    //message.peerid = sender id </br>
+                                    //message.text is the content </br>
+                                }) </br>
+                            </precode>
+                        </p>
+                    </section>
+
+                    <!-- .................................... $LESS .................................... -->
+                    <section class="section-content section-videoWidget" id="section-videoWidget">
+                        <h3 class="section-title">
+                           <b> VideoWidgetServer </b>
+                        </h3>
+                        <p>
+                            Video Widget user only require knowledge of video widget client API.
+                        </p>
+
+                    </br></br>
+
+                        <h3 class="section-title">
+                           <b> VideoWidgetClient </b>
+                        </h3>
+                        <p>
+                            Handler for your own stream
+                            <precode> .onStart(function(localstream){ </br>
+                                //handle the stream here </br>
+                            }) </br>
+                            </precode>
+                        </p>
+
+                        <p>
+                            Handler when a remote stream come in
+                            <precode> .oncall(function(stream){ </br>
+                                //handle the stream here </br>
+                            }) </br>
+                            </precode>
+                        </p>
+
+                    </br>
+                    </section>
+
+
+                     <!-- .................................... $Bootstrap .................................... -->
+                    <section class="section-content section-rtcstar" id="section-rtcstar">
+                        <h3 class="section-title">
+                            <b>RTCStarServer </b>
+                        </h3>
+                        <p>    
+                            Start the server. 
+                            <precode>
+                                .start()
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Listen for server id after the server.start() method has been called.
+                            <precode>
+                                .onServerEvent('open',function(server_id){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Whenever a new client has connected with you 
+                            <precode>
+                                .onServerEvent('ClientEnter',function(peer_id){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Sending a connected peer a message 
+                            <precode>
+                                .send(peerId, message) 
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Broadcast message to everyone 
+                            <precode>
+                                .broadcast(message) 
+                            </precode>
+                        </p>
+
+                        <h3 class="section-title">
+                            <b>RTCStarClient </b>
+                        </h3>
+                        <p>    
+                            Connect the client to the server
+                            <precode>
+                                .start(server_id)
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Sending a message to the server
+                            <precode>
+                                .request(message)
+                            </precode>
+                        </p>
+
+                    </br></br></br></br></br></br></br></br></br>
+                    </section>
+
+
+
+    </div>
+</div>
+</section>
+
+
+</div><!-- /main span9 -->
+
+</div><!-- /row -->
+</div><!-- /container -->
+
+<!-- .................................... $scripts .................................... -->
+<script src="./About_files/jquery.min.js"></script>
+<!--<script src="./About_files/js"></script> -->
+<!--<script src="./About_files/jquery.ui.map.min.js"></script>  -->
+<script src="./About_files/bootstrap.min.js"></script>
+<script src="./About_files/jquery.fancybox.min.js"></script>
+<script src="./About_files/jquery.hoverdir.min.js"></script>
+<script src="./About_files/jquery.isotope.min.js"></script>
+<script src="./About_files/jquery.masonry.min.js"></script>
+<script src="./About_files/jquery.fitvids.min.js"></script>
+<script src="./About_files/jquery.flexslider.min.js"></script>
+<script src="./About_files/jquery.imagesloaded.min.js"></script>
+<script src="./About_files/cbpBGSlideshow.min.js"></script>
+<!-- <script src="./About_files/script.js"></script>  -->
+
+
+</body></html>
