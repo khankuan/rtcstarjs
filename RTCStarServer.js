@@ -133,13 +133,18 @@ function RTCStarServer(){
 
       var id = conn.peer;
 
+      //  Store connection
+      peerConnections[id] = conn;
+
+      //  ClientEnter handler
+      if (eventHandlers['ClientEnter'] != null)
+          for (var i in eventHandlers['ClientEnter'])
+              eventHandlers['ClientEnter'][i](id);
+
       //  Broadcast to add users new user has joined
       var message = new RoomRTCMessage(id);
       message.type = "ClientEnter";
       broadcast("event:"+JSON.stringify(message));
-
-      //  Store connection
-      peerConnections[id] = conn;
 
       //  Send user list with ids to new connection
       var message = new RoomRTCMessage(Object.keys(peerConnections));
@@ -180,7 +185,7 @@ function RTCStarServer(){
 
         if (eventHandlers['ClientLeave'] != null)
           for (var i in eventHandlers['ClientLeave'])
-            eventHandlers['ClientLeave'][i]();
+            eventHandlers['ClientLeave'][i](id);
 
         var message = new RoomRTCMessage(id);
         message.type = "ClientLeave";
