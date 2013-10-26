@@ -5,7 +5,8 @@ A star topology client-server framework for WebRTC using PeerJS.
 
 RTCStarJS is a wrapper around PeerJS. Using PeerJs p2p implementation, RTCStarJS wrapped plugins (chat and video) around it to allow developer to enable peer to peer chat or video conference with a few methods. 
 
-[Main site](www.rtcstarjs.com)
+[Main site and API References](http://rtcstarjs.com)
+
 [Download](https://dl.dropboxusercontent.com/u/10597187/RTCStarJS.zip)
 
 Setup 
