@@ -5,6 +5,8 @@ A star topology client-server framework for WebRTC using PeerJS.
 
 RTCStarJS is a wrapper around PeerJS. Using PeerJs p2p implementation, RTCStarJS wrapped plugins (chat and video) around it to allow developer to enable peer to peer chat or video conference with a few methods. 
 
+[Main site](www.rtcstarjs.com)
+
 Setup 
 =========
 Import the following .js files, 
@@ -83,6 +85,45 @@ One user will have to run initServer which will call initClient, other user can 
 
 [Demo](http://rtcstarjs.com/ChatDemo.html)
 
-Demo and Guide
+Peer to peer video example
 =========
-www.rtcstarjs.com 
+One user will have to run initServer which will call initClient, other user can simply run initClient with the given server id provided.
+
+    function initserver() { 
+      
+      //server creation code 
+      var server = new rtcstarserver(); 
+
+      //setting up widget necessary 
+      var videowidgetserver = new videowidgetserver(server); 
+
+      //starting the server 
+      server.start(); 
+
+      server.onserverevent('open',function(server_id){ 
+        initclient(server_id); 
+      }); 
+    } 
+
+    function initclient(server_id) { 
+      //server creation code 
+      var client = new rtcstarclient(); 
+
+      //setting up widget necessary 
+      var videowidgetclient = new videowidgetclient(client); 
+
+      //starting the client 
+      client.start(); 
+
+      videowidgetclient.onstart(function(localstream){  
+        //set where you want to display your own stream 
+
+       }) 
+
+      videowidgetclient.oncall(function(stream){ 
+        //set where do you want to display other's stream 
+      }) 
+    
+    } 
+
+[Demo](http://rtcstarjs.com/VideoDemo.html)
