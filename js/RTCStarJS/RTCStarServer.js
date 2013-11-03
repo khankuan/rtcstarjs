@@ -141,14 +141,14 @@ function RTCStarServer(){
           for (var i in eventHandlers['ClientEnter'])
               eventHandlers['ClientEnter'][i](id);
 
-      //  Broadcast to add users new user has joined
+      //  Broadcast to all users new user has joined
       var message = new RoomRTCMessage(id);
       message.type = "ClientEnter";
       broadcast("event:"+JSON.stringify(message));
 
       //  Send user list with ids to new connection
       var message = new RoomRTCMessage(Object.keys(peerConnections));
-      message.type = "PeerList";
+      message.type = "ClientList";
       conn.send("event:"+JSON.stringify(message));
   
 

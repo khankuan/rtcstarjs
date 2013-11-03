@@ -37,7 +37,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 "><a href="ChatUsage.html">Chat tutorial</a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoUsage.html">Video tutorial</a></li>
                                         </ul>
                                     </li>
                                     
@@ -48,7 +47,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 active"><a href="ChatDemo.html">Chat </a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoDemo.html">Video </a></li>
                                         </ul>
                                     </li>
                                     
@@ -67,9 +65,9 @@
         <h2 class="section-title">
             Chat Demo Example
             <small style="text-transform:none">
-                1. Click start server to get a server id </br>
-                2. Open another browser instance and paste the server id and press join server </br>
-                3. Start sending message!
+                1. Click start server to get a server id, a client will automatically be created. </br>
+                2. Open another browser instance, paste the server id from the previous tab and join the server </br>
+                3. Start sending messages!
             </small>
 
         </h2>
@@ -86,7 +84,7 @@
 
 
         <div id="chat_box">
-            Chat will be shown here
+            Chat will be shown below
             <precode>
                 <ul id="chat_message"> 
                 </ul>
@@ -122,17 +120,9 @@
     <script src="js/RTCStarJS/RTCStarClient.js"></script>
     <script src="js/RTCStarJS/RTCStarServer.js"></script>
 
-    <!-- PDFJS -->
-    <script src="js/pdfjs/pdf.js"></script>
-    <script src="js/pdfjs/pdf.worker.js"></script>
-
     <!-- plugins -->
     <script src="js/RTCStarJS/plugin/ChatClient.js"></script>
     <script src="js/RTCStarJS/plugin/ChatServer.js"></script>
-    <script src="js/RTCStarJS/plugin/VideoClient.js"></script>
-    <script src="js/RTCStarJS/plugin/VideoServer.js"></script>
-    <script src="js/RTCStarJS/plugin/BoardClient.js"></script>
-    <script src="js/RTCStarJS/plugin/BoardServer.js"></script>
 
     <script>
 
@@ -152,14 +142,12 @@
 
         $('#btn_sendmsg').click(function(){
             var message = $('#txt_msg').val();
-            chatWidgetClient.sendChat(message);
-            $('#chat_message').append('<li> Me' + ' : ' + message + '</li>');   
+            chatWidgetClient.sendchat(message);
         })
 
         function initServer(){
             //server creation code 
             var server = new RTCStarServer();
-            server.debug(true);
 
             //setting up widget necessary
             var chatWidgetServer = new ChatWidgetServer(server);
@@ -170,34 +158,47 @@
             server.onServerEvent('Open',function(server_id){
                 $('#created_id').text('Server Id = '+server_id);
                 initClient(server_id);
+                $('#server_id').val(server_id);
             });
             
         }
 
         function initClient(server_id){
             var client = new RTCStarClient();
-            client.debug(true);
 
             //setting up widget necessary
             chatWidgetClient = new ChatWidgetClient(client);
-            var boardClient = new BoardClient(client);
+
+            //  UI update
+            configChat(chatWidgetClient);
 
             //starting the client 
             client.start(server_id);
-
-            //show video and chat
-            $('#video_chat').show();
-
-            configChat(chatWidgetClient);
         }
 
         function configChat(chatWidgetClient){
-            chatWidgetClient.onMessage(function(message){
-                //message.peerId is the sender Id
-                //message.text is the content
-                $('#chat_message').append('<li>' + message.peerId + ' : ' + message.text + '</li>');
-             })
+            //show video and chat
+            $('#video_chat').show();
+            var chatController = new Object();
+            chatController.onMessage = function(message){
+                if (message.subType == "Init"){
+                    for (var i in message.data){
+                        $('#chat_message').append('<li>' + message.data[i].peerId + ' : ' + message.data[i].text + '</li>');
+                    }
+                } else if (message.subType == "NewChat")
+                    $('#chat_message').append('<li>' + message.peerId + ' : ' + message.text + '</li>');
+            }
+
+            chatController.onOpen = function(peerId){
+                 $('#join_server').text("Join server done ("+ peerId+")");
+                 var welcomeMessage = "I'm in!";
+                 chatWidgetClient.sendchat(welcomeMessage);   
+            }
+
+
+            chatWidgetClient.setdelegate(chatController);
         }
+
     </script>
 
 </body>

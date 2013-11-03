@@ -37,7 +37,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 "><a href="ChatUsage.html">Chat tutorial</a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoUsage.html">Video tutorial</a></li>
                                         </ul>
                                     </li>
                                     
@@ -48,7 +47,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2"><a href="ChatDemo.html">Chat </a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoDemo.html">Video </a></li>
                                         </ul>
                                     </li>
 
@@ -67,11 +65,16 @@
     <section class="section-content section-about" id="section-about">
         <h2  class="section-title">
             RTCStar
-            <small>Peer to peer chat and video features in yoru site in a few line of codes!</small>
+            <small>Multi-peer server/client communication of data or media for your site in a few line of codes!</small>
 
         </h2>
         <p>
-            RTCStarJS is a wrapper around <a href="http://peerjs.com/">PeerJS</a>. Using PeerJs p2p implementation, RTCStarJS wrapped plugins (chat and video) around it to allow developer to enable peer to peer chat or video conference with a few methods. </br></br>
+            RTCStarJS is a wrapper around <a href="http://peerjs.com/">PeerJS</a>. Using PeerJs P2P implementation, RTCStarJS builds a star
+            topology (Server & Client) on top on PeerJS. <br><br>
+
+            Typically, a host user would initiate and start a RTCStarServer on his browser. Others, including himself, will then create a RTCStarClient each to communication with the server. The server serves as a centralised point for broadcasting and logic for the application that you will be building.
+            </br></br>
+
             <a href="https://dl.dropboxusercontent.com/u/10597187/RTCStarJS.zip" class="btn btn-primary ">Download Now!</a>
             <a href="https://github.com/khankuan/RTCStarJS" class="btn btn-primary ">Visit us at Github</a>
         </p>
@@ -91,13 +94,11 @@
 
         <h3 class="section-title">
             Choose the plugin you want! 
-            <small> Import chat or video plugin!</small>  
+            <small> Import chat plugin!</small>  
             <precode>       
             <!-- RTC Star library -->
             &lt;script src="js/RTCStarJS/plugin/ChatClient.js"&gt;&lt;/script&gt; </br>
             &lt;script src="js/RTCStarJS/plugin/ChatServer.js"&gt;&lt;/script&gt; </br>
-            &lt;script src="js/RTCStarJS/plugin/VideoClient.js"&gt;&lt;/script&gt; </br>
-            &lt;script src="js/RTCStarJS/plugin/VideoServer.js"&gt;&lt;/script&gt;
             </precode>
         </h3> 
 

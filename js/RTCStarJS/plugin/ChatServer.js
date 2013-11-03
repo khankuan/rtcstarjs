@@ -1,41 +1,28 @@
 var ChatWidgetServer = function(rtcStarServer){
 
-	//originally was var history[];
 	var history;
-	var server;
-
-	setUp(rtcStarServer);
-
-	function setUp(rtcStarServer){
-
-		server = rtcStarServer;
-		server.onServerEvent('Open', init);
-		server.onServerEvent('ClientEnter', initClient);
-		server.onRequest('Chat', newChat);
-	}
+	rtcStarServer.onServerEvent('Open', init);
+	rtcStarServer.onServerEvent('ClientEnter', initClient);
+	rtcStarServer.onRequest('Chat', newChat);	//	Listen to Chat requests
 	
+	//	When server starts
 	function init(serverId){
 		history = [];
 	}
-	
-	function initClient(peerId){
 
-		if (history.length !=0){
-			var message = new Object();
-			message.type = 'Chat';
-			message.subType = 'Init';
-			message.data = history;
-			server.send(peerId, JSON.stringify(message));
-		}
+	//	When a new user enters, we send the chat history
+	function initClient(peerId){
+		var message = new Object();
+		message.type = 'Chat';
+		message.subType = 'Init';
+		message.data = history;
+		rtcStarServer.send(peerId, message);
 	}
 	
+	//	When receiving a new chat, we store the message and broadcast it
 	function newChat(message){
 		//storing history of chat 
-		console.log('here!!');
 		history.push(message);
-		server.broadcast(message);
-
+		rtcStarServer.broadcast(message);
 	}
-
-
 }

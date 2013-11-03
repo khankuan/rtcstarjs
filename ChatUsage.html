@@ -38,7 +38,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 active"><a href="ChatUsage.html">Chat tutorial</a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoUsage.html">Video tutorial</a></li>
                                         </ul>
                                     </li>
                                     
@@ -49,7 +48,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 "><a href="ChatDemo.html">Chat </a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoDemo.html">Video </a></li>
                                         </ul>
                                     </li>
                                     
@@ -67,70 +65,105 @@
     <!-- .................................... $About .................................... -->
     <section class="section-content section-about" id="section-about">
         <h2 class="section-title">
-            Chat client example
+            Chat server/client example
             <small style="text-transform:none">
-                Initiator of the chat will have to be the server and client. </br>
-                The rest of the user will be the clients.
+                Host of the chat will create both the chat server and chat client. </br>
+                The rest of the users only create a chat client.
             </small>
 
         </h2>
 
         <h3 class="section-title">
-            Setting up Server
-            <small>  </small>  
-            <precode>       
-                function initServer() { </br>
-                <span style="padding-left: 20px; display:block">
-                    //server creation code </br>
-                    var server = new RTCStarServer(); </br></br>
-
-                    //setting up widget necessary </br>
-                    var chatWidgetServer = new ChatWidgetServer(server); </br></br>
-                    
-                    //starting the server  </br>
-                    server.start();  </br></br>
-
-                    server.onServerEvent('Open',function(server_id){ </br>
-                        <span style="padding-left: 20px; display:block">
-                        $('#created_id').text('Server Id = '+server_id); </br>
-                        initClient(server_id); </br>
-                        </span>
-                    });  </br>
-                </span>
-                } </br>
-            </precode>
-        </h3> 
-
-        <h3 class="section-title">
             Setting up Client
             <small> </small>  
             <precode>       
-                function initClient(server_id) { </br>
-                <span style="padding-left: 20px; display:block">
-                    //server creation code </br>
-                    var client = new RTCStarClient(); </br></br>
+                var ChatWidgetClient = function(rtcStarClient){<br>
+                    <span style="padding-left: 20px; display:block">
+                    var delegate;<br>
+                    rtcStarClient.onClientEvent('Open', openHandler);<br>
+                    rtcStarClient.onMessage('Chat', chatHandler);   //  Register listener to Chat<br><br>
 
-                    //setting up widget necessary </br>
-                    var chatWidgetClient = new ChatWidgetClient(client); </br></br>
-                    
-                    //starting the client  </br>
-                    client.start();  </br></br>
-
-                    chatWidgetClient.onMessage(function(message){ </br>
+                    //  To delegate task of updating the view<br>
+                    this.setdelegate = function(d){<br>
                         <span style="padding-left: 20px; display:block">
-                        //message.peerId is the sender Id </br>
-                        //message.text is the content </br>
-                        //do what you want with the messages </br>
+                        delegate = d;<br>
                         </span>
-                    }) </br>
+                    }<br><br>
+                    
+                    //  Send button on html<br>
+                    this.sendchat = function(text){<br>
+                        <span style="padding-left: 20px; display:block">
+                        var message = new Object();<br>
+                        message.type = 'Chat';<br>
+                        message.text = text;<br>
+                        message.subType = 'NewChat';<br><br>
 
-                </span>
-                } </br>
+                        rtcStarClient.request(message);<br>
+                        </span>
+                    }<br><br>
+
+                    //  When client is started<br>
+                    function openHandler(peerId){<br>
+                        <span style="padding-left: 20px; display:block">
+                        if (delegate != undefined)<br>
+                            <span style="padding-left: 20px; display:block">
+                            delegate.onOpen(peerId);<br>
+                            </span>
+                        </span>
+                    }<br><br>
+                    
+                    //  When received a chat message<br>
+                    function chatHandler(message){<br>
+                        <span style="padding-left: 20px; display:block">
+                        if (delegate != undefined)<br>
+                            <span style="padding-left: 20px; display:block">
+                            delegate.onMessage(message);<br>
+                            </span>
+                        </span>
+                    }<br>
+                    </span>
+                }<br>
             </precode>
 
-            Client Sending Message
+            Client Sending Server
             <precode>
-                chatWidgetClient.sendChat(message);
+                
+                var ChatWidgetServer = function(rtcStarServer){<br><br>
+                    <span style="padding-left: 20px; display:block">
+                    var history;<br>
+                    rtcStarServer.onServerEvent('Open', init);<br>
+                    rtcStarServer.onServerEvent('ClientEnter', initClient);<br>
+                    rtcStarServer.onRequest('Chat', newChat);   //  Listen to Chat requests<br><br>
+                    
+                    //  When server starts<br>
+                    function init(serverId){<br>
+                        <span style="padding-left: 20px; display:block">
+                        history = [];<br>
+                        </span><br>
+                    }<br><br>
+
+                    //  When a new user enters, we send the chat history<br>
+                    function initClient(peerId){<br>
+                        <span style="padding-left: 20px; display:block">
+                        var message = new Object();<br>
+                        message.type = 'Chat';<br>
+                        message.subType = 'Init';<br>
+                        message.data = history;<br>
+                        rtcStarServer.send(peerId, message);<br>
+                        </span>
+                    }<br><br>
+                    
+                    //  When receiving a new chat, we store the message and broadcast it<br>
+                    function newChat(message){<br>
+                        <span style="padding-left: 20px; display:block">
+                        //storing history of chat <br>
+                        history.push(message);<br>
+                        rtcStarServer.broadcast(message);<br>
+                        </span>
+                    }<br><br>
+                    </span>
+                }<br>
+
             </precode>
         </h3> 
 

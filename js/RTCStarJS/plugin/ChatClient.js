@@ -1,47 +1,33 @@
 var ChatWidgetClient = function(rtcStarClient){
-	
-	var client;
-	var onMessageHandler = new Array();
 
-	setUp(rtcStarClient);
-	
-	function setUp(rtcStarClient) {
+	var delegate;
+	rtcStarClient.onClientEvent('Open', openHandler);
+	rtcStarClient.onMessage('Chat', chatHandler);	//  Register listener to Chat
 
-		client = rtcStarClient;
-		client.onMessage('Chat', chatHandler);
-		client.onClientEvent('Close', disableChat);
-		client.onClientEvent('Error', disableChat);
-
-	}
-
-	this.onMessage = function(handler){
-		onMessageHandler.push(handler);
+	//  To delegate task of updating the view
+	this.setdelegate = function(d){
+		delegate = d;
 	}
 	
 	//	Send button on html
-	this.sendChat = function(text){
-
+	this.sendchat = function(text){
 		var message = new Object();
 		message.type = 'Chat';
 		message.text = text;
 		message.subType = 'NewChat';
 
-		client.request(message);
-	
+		rtcStarClient.request(message);
+	}
+
+	//  When client is started
+	function openHandler(peerId){
+		if (delegate != undefined)
+			delegate.onOpen(peerId);
 	}
 	
+	//  When received a chat message
 	function chatHandler(message){
-		console.log('recieved here!');
-		//Don't want to recieve my own message
-		if(message.peerId != client.getClientPeerId()){
-			for(var i in onMessageHandler)
-				onMessageHandler[i](message);
-		}
-	}
-	
-	function disableChat(){
-		//	Disable send button
-		//	Grey out text field
-		//	Or call some method to do that
+		if (delegate != undefined)
+			delegate.onMessage(message);
 	}
 }

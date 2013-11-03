@@ -36,7 +36,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2 "><a href="ChatUsage.html">Chat tutorial</a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoUsage.html">Video tutorial</a></li>
                                         </ul>
                                     </li>
                                     
@@ -47,7 +46,6 @@
                                         </a>
                                         <ul class="dropdown-menu">
                                             <li class="nav-portfolio-2"><a href="ChatDemo.html">Chat </a></li>
-                                            <li class="nav-portfolio-3"><a href="VideoDemo.html">Video </a></li>
                                         </ul>
                                     </li>
 
@@ -67,17 +65,13 @@
                     <div class="row">
                         <div class="span3 documentation-nav affix hidden-phone">
                             <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#section-chatwidget">
+                                <li><a href="#section-rtcstarclient">
                                     <i class="icon-angle-right pull-right"></i>
-                                    ChatWidget
+                                    RTCStarClient
                                 </a></li>
-                                <li><a href="#section-videoWidget">
+                                <li class="active"><a href="#section-rtcstarserver">
                                     <i class="icon-angle-right pull-right"></i>
-                                    VideoWidget
-                                </a></li>
-                                <li class="active"><a href="#section-rtcstar">
-                                    <i class="icon-angle-right pull-right"></i>
-                                    RTCStar
+                                    RTCStarServer
                                 </a></li>
                             </ul>
                         </div>
@@ -89,129 +83,214 @@
                                 </small>
                             </h2>
 
-                            <!-- .................................... $HTML5 CSS3 .................................... -->
-                            <section class="section-content section-chatwidget" id="section-chatwidget">
-                                <h3 class="section-title">
-                                    <b>ChatWidgetServer</b>
-                                </h3>
-                                <p>
-                                    Chat Widget user only require knowledge of chat widget client API
-                                </p>
 
-                            </br></br>
-
-                            <h3 class="section-title">
-                               <b> ChatWidgetClient</b>
-                            </h3>
-                            <p>
-                                Broadcast a message to all peers connected to the same rtcstarserver. 
-                                <precode> .sendChat(message) </precode>
-                            </p>
-
-                            <p>
-                                Handler to handle message that was broadcasted to you
-                                <precode> .onMessage(function(message){ </br>
-                                    //message.peerid = sender id </br>
-                                    //message.text is the content </br>
-                                }) </br>
-                            </precode>
-                        </p>
-                    </section>
-
-                    <!-- .................................... $LESS .................................... -->
-                    <section class="section-content section-videoWidget" id="section-videoWidget">
-                        <h3 class="section-title">
-                           <b> VideoWidgetServer </b>
-                        </h3>
-                        <p>
-                            Video Widget user only require knowledge of video widget client API.
-                        </p>
-
-                    </br></br>
-
-                        <h3 class="section-title">
-                           <b> VideoWidgetClient </b>
-                        </h3>
-                        <p>
-                            Handler for your own stream
-                            <precode> .onStart(function(localstream){ </br>
-                                //handle the stream here </br>
-                            }) </br>
-                            </precode>
-                        </p>
-
-                        <p>
-                            Handler when a remote stream come in
-                            <precode> .oncall(function(stream){ </br>
-                                //handle the stream here </br>
-                            }) </br>
-                            </precode>
-                        </p>
-
-                    </br>
-                    </section>
 
 
                      <!-- .................................... $Bootstrap .................................... -->
-                    <section class="section-content section-rtcstar" id="section-rtcstar">
-                        <h3 class="section-title">
-                            <b>RTCStarServer </b>
-                        </h3>
-                        <p>    
-                            Start the server. 
-                            <precode>
-                                .start()
-                            </precode>
-                        </p>
-
-                        <p>    
-                            Listen for server id after the server.start() method has been called.
-                            <precode>
-                                .onServerEvent('open',function(server_id){ </br>
-                                    </br>
-                                }) </br>
-                            </precode>
-                        </p>
-
-                        <p>    
-                            Whenever a new client has connected with you 
-                            <precode>
-                                .onServerEvent('ClientEnter',function(peer_id){ </br>
-                                    </br>
-                                }) </br>
-                            </precode>
-                        </p>
-
-                        <p>    
-                            Sending a connected peer a message 
-                            <precode>
-                                .send(peerId, message) 
-                            </precode>
-                        </p>
-
-                        <p>    
-                            Broadcast message to everyone 
-                            <precode>
-                                .broadcast(message) 
-                            </precode>
-                        </p>
-
+                    <section class="section-content section-rtcstarclient" id="section-rtcstarclient">
                         <h3 class="section-title">
                             <b>RTCStarClient </b>
                         </h3>
+
+
                         <p>    
-                            Connect the client to the server
+                            Start the client
                             <precode>
-                                .start(server_id)
+                                .start() 
                             </precode>
                         </p>
 
                         <p>    
-                            Sending a message to the server
+                            Stop the client
                             <precode>
-                                .request(message)
+                                .stop() 
                             </precode>
                         </p>
+
+                        <p>    
+                            Send a request object to server, example's type is 'Chat'
+                            <precode>
+                                .send({type:'Chat', data:{....}})
+                            </precode>
+                        </p>
+
+                         <p>    
+                            Broadcast a message object to all clients, example's type is 'Chat'
+                            <precode>
+                                .broadcast({type:'Chat', data:{....}}) 
+                            </precode>
+                        </p>
+
+                         <p>    
+                            Call a peer
+                            <precode>
+                                .call(peerId, mediastream)
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Listen for client events (Multiple listeners are allowed):<br>
+                            [event, callback args]<br>
+                            'Open': (clientPeerId)<br>
+                            'Close' <br>
+                            'Error': (err)<br>
+                            'ClientEnter': (peerId)<br>
+                            'ClientLeave': (peerId)<br>
+                            'ClientList': ([peerId, peerId, peerId...])<br>
+                            'Call': (callConnPeerJS)<br>
+                            
+                            <precode>
+                                .onClientEvent(event, function(args){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Remove listener for client events
+                            <precode>
+                                .removeOnClientEvent(event, function(){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Listen for server messages (Multiple listeners to each type are allowed)
+                            <precode>
+                                .onMessage(type, function(message){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Remove listener for server messages
+                            <precode>
+                                .removeOnMessage(type, function(){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+
+                        <p>    
+                            Set debug mode to print out log messages. 
+                            <precode>
+                                .debug()
+                            </precode>
+                        </p>
+
+
+                        <p>    
+                            Get the client peerId of PeerJS
+                            <precode>
+                                .getClientPeerId()
+                            </precode>
+                        </p>
+
+                       
+
+
+                    </br></br></br></br></br></br></br></br></br>
+                    </section>
+
+
+
+
+
+
+                    <section class="section-content section-rtcstarserver" id="section-rtcstarserver">
+                        <h3 class="section-title">
+                            <b>RTCStarServer </b>
+                        </h3>
+
+                        <p>    
+                            Start the server
+                            <precode>
+                                .start() 
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Stop the server
+                            <precode>
+                                .stop() 
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Send a message object to a client, example's type is 'Chat'
+                            <precode>
+                                .send(peerId, {type:'Chat', data:{....}}) 
+                            </precode>
+                        </p>
+
+                         <p>    
+                            Broadcast a message object to all clients, example's type is 'Chat'
+                            <precode>
+                                .broadcast({type:'Chat', data:{....}}) 
+                            </precode>
+                        </p>
+                        
+                        <p>    
+                            Listen for server events (Multiple listeners are allowed):<br>
+                            [event, callback args]<br>
+                            'Open': (serverPeerId)<br>
+                            'Close'<br>
+                            'Error': (err)<br>
+                            'ClientEnter': (peerId)<br>
+                            'ClientLeave': (peerId)<br>
+                            <precode>
+                                .onServerEvent(event, function(args){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Remove listener for server events
+                            <precode>
+                                .removeOnServerEvent(event, function(){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Listen for server requests (Multiple listeners to each type are allowed)
+                            <precode>
+                                .onRequest(type, function(request){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+                        <p>    
+                            Remove listener for server requests
+                            <precode>
+                                .removeOnRequest(type, function(){ </br>
+                                    </br>
+                                }) </br>
+                            </precode>
+                        </p>
+
+
+                        <p>    
+                            Set debug mode to print out log messages. 
+                            <precode>
+                                .debug()
+                            </precode>
+                        </p>
+
+
+                        <p>    
+                            Get the server peerId of PeerJS
+                            <precode>
+                                .getServerPeerId()
+                            </precode>
+                        </p>
+
 
                     </br></br></br></br></br></br></br></br></br>
                     </section>

@@ -125,17 +125,9 @@
     <script src="js/RTCStarJS/RTCStarClient.js"></script>
     <script src="js/RTCStarJS/RTCStarServer.js"></script>
 
-    <!-- PDFJS -->
-    <script src="js/pdfjs/pdf.js"></script>
-    <script src="js/pdfjs/pdf.worker.js"></script>
-
     <!-- plugins -->
-    <script src="js/RTCStarJS/plugin/ChatClient.js"></script>
-    <script src="js/RTCStarJS/plugin/ChatServer.js"></script>
     <script src="js/RTCStarJS/plugin/VideoClient.js"></script>
     <script src="js/RTCStarJS/plugin/VideoServer.js"></script>
-    <script src="js/RTCStarJS/plugin/BoardClient.js"></script>
-    <script src="js/RTCStarJS/plugin/BoardServer.js"></script>
 
     <script>
 
@@ -166,6 +158,7 @@
             server.onServerEvent('Open',function(server_id){
                 $('#created_id').text('Server Id = '+server_id);
                 initClient(server_id);
+                $('#server_id').val(server_id);
             });
             
         }
