@@ -6,12 +6,17 @@ function RTCStarServer(){
   var eventHandlers = {}; //  Open, Close, Error, ClientEnter, ClientLeave
   var requestHandlers = {};
   var debug = false;
-
+  this.key = "";
 
   /*** Public methods ***/
   
   this.debug = function(d){
     debug = d;
+  }
+
+  
+  this.setHost = function(host){
+    serverPeer.host = host;
   }
 
   // Adds a handler to a particular server event
@@ -49,7 +54,7 @@ function RTCStarServer(){
   //  Starts the server
   this.start = function(){
     //  Create peer
-    serverPeer = new Peer({key: 'fxv643daihuuwhfr'});
+    serverPeer = new Peer({key: this.key});
 
     //  Event handlers
     serverPeer.on('open', peerjsOpenHandler);
