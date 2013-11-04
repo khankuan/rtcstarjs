@@ -8,7 +8,7 @@ function RTCStarClient(){
   var eventHandlers = {}; //  Open, Close, Error, ClientEnter, ClientLeave, ClientList, Call
   var messageHandlers = {};
   var debug = false;
-
+  this.key = "";
 
   /*** Public methods ***/
   this.debug = function(d){
@@ -60,7 +60,7 @@ function RTCStarClient(){
   //  To start the client
   this.start = function(serverId){
     //  Create peer
-    clientPeer = new Peer({key: 'fxv643daihuuwhfr'}, {secure: true});
+    clientPeer = new Peer({key: this.key}, {secure: true});
     serverPeerId = serverId;
 
     //  Event handlers
