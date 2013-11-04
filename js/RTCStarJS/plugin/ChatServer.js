@@ -1,6 +1,7 @@
 var ChatWidgetServer = function(rtcStarServer){
 
 	var history;
+	rtcStarServer.key = 'fxv643daihuuwhfr';	//	Pls don't abuse this :(
 	rtcStarServer.onServerEvent('Open', init);
 	rtcStarServer.onServerEvent('ClientEnter', initClient);
 	rtcStarServer.onRequest('Chat', newChat);	//	Listen to Chat requests

@@ -1161,7 +1161,7 @@ address {
 }
 precode {
 display: block;
-text-transform:lowercase;
+text-transform:none;
 margin: 0 0 25px;
 padding: 8px 15px;
 background: #f8f8f8;

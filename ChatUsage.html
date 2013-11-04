@@ -84,14 +84,14 @@
                     rtcStarClient.onMessage('Chat', chatHandler);   //  Register listener to Chat<br><br>
 
                     //  To delegate task of updating the view<br>
-                    this.setdelegate = function(d){<br>
+                    this.setDelegate = function(d){<br>
                         <span style="padding-left: 20px; display:block">
                         delegate = d;<br>
                         </span>
                     }<br><br>
                     
                     //  Send button on html<br>
-                    this.sendchat = function(text){<br>
+                    this.sendChat = function(text){<br>
                         <span style="padding-left: 20px; display:block">
                         var message = new Object();<br>
                         message.type = 'Chat';<br>

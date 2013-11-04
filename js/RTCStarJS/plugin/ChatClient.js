@@ -1,16 +1,17 @@
 var ChatWidgetClient = function(rtcStarClient){
 
 	var delegate;
+	rtcStarClient.key = 'fxv643daihuuwhfr';	//	Pls don't abuse this :(
 	rtcStarClient.onClientEvent('Open', openHandler);
 	rtcStarClient.onMessage('Chat', chatHandler);	//  Register listener to Chat
 
 	//  To delegate task of updating the view
-	this.setdelegate = function(d){
+	this.setDelegate = function(d){
 		delegate = d;
 	}
 	
 	//	Send button on html
-	this.sendchat = function(text){
+	this.sendChat = function(text){
 		var message = new Object();
 		message.type = 'Chat';
 		message.text = text;

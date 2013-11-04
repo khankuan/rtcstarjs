@@ -142,7 +142,7 @@
 
         $('#btn_sendmsg').click(function(){
             var message = $('#txt_msg').val();
-            chatWidgetClient.sendchat(message);
+            chatWidgetClient.sendChat(message);
         })
 
         function initServer(){
@@ -192,11 +192,11 @@
             chatController.onOpen = function(peerId){
                  $('#join_server').text("Join server done ("+ peerId+")");
                  var welcomeMessage = "I'm in!";
-                 chatWidgetClient.sendchat(welcomeMessage);   
+                 chatWidgetClient.sendChat(welcomeMessage);   
             }
 
 
-            chatWidgetClient.setdelegate(chatController);
+            chatWidgetClient.setDelegate(chatController);
         }
 
     </script>
