@@ -15,6 +15,10 @@ function RTCStarClient(){
     debug = d;
   }
 
+  this.setHost = function(host){
+    serverPeer.host = host;
+  }
+
   //  Adds a handler to a particular client event
   this.onClientEvent = function(event, handler){
     if (eventHandlers[event] == null)
