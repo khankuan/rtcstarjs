@@ -5,122 +5,111 @@ A multi-peer server/client, real-time communication of data or media for your si
 
 RTCStarJS is a wrapper around PeerJS. Using PeerJs P2P implementation, RTCStarJS builds a star topology (Server & Client) on top on PeerJS. 
 
-[Main site and API References](http://rtcstarjs.com)
 
 Setup 
 =========
 Import the following .js files, 
 
-    <script src="js/rtcstarjs/adapter.js"></script> 
-    <script src="js/rtcstarjs/peer.js"></script> 
-    <script src="js/rtcstarjs/rtcstarclient.js"></script> 
-    <script src="js/rtcstarjs/rtcstarserver.js"></script>
+    <script src="js/vendor/adapter.js"></script> 
+    <script src="js/vendor/peer.js"></script> 
+    <script src="js/vendor/rtc-star-client.js"></script> 
+    <script src="js/vendor/rtc-star-server.js"></script>
 
 
 Usage
 =========
-Typically, a host user would initiate and start a RTCStarServer on his browser. Others, including himself, will then create a RTCStarClient each to communication with the server. The server serves as a centralised point for broadcasting and logic for the application that you will be building. 
+Typically, a host user would initiate and start a RTCStarServer on his browser. Others, including himself, will then create a RTCStarClient each to communicate with the server. The server serves as a centralised point for broadcasting and logic for the application that you will be building. 
 
 Init Server code 
 
-    var server = new RtcStarServer(); 
+    var server = new RTCStarServer(); 
     
-    //  Events are standardised, such as ClientEnter, ClientLeave
-    server.onServerEvent('Open',function(server_id){
+    //  System Events are prefix with $, includes: $open, $close, $error, $enter, $leave
+    server.on('$open',function(server_id){
     });
 
-    //  Requests can be any type, used for application communication
-    server.onServerRequest('Chat',function(request){
+    //  Request events of any other types
+    server.on('chat.requestNewChat',function(request){
     });
 
     //  All set, start server
-    server.start();
+    server.start("MyCoolServerName", peerjs_options);
     
 
 Init Client code 
 
-    var client = new RtcStarClient(); 
+    var client = new RTCStarClient();
 
-    //  Events are standardised, such as ClientEnter, ClientLeave
-    client.onClientEvent('Open',function(client_id){
+    //  System Events including: $open, $close, $error, $enter, $leave, $list, $call
+    client.on('$open',function(client_id){
     });
 
     //  Messages can be any type, used for application communication
-    client.onMessage('Chat',function(message){
+    client.on('chat.newChat',function(message){
     });
 
-    client.start(server_id);
+    client.start(server_name, peerjs_options);
 
 
 Peer to peer chat example
 =========
 Client Component for chat:
 
-    var ChatWidgetClient = function(rtcStarClient){
-
-      var delegate;
-      rtcStarClient.onClientEvent('Open', openHandler);
-      rtcStarClient.onMessage('Chat', chatHandler); //  Register listener to Chat
-
-      //  To delegate task of updating the view
-      this.setdelegate = function(d){
-        delegate = d;
-      }
+    function ChatClient(rtcStarClient){
+  
+      var _this = this;
+      this.initHandler;
+      this.newChatHandler;
+      this.disableChatHandler;
       
-      //  Send button on html
-      this.sendchat = function(text){
-        var message = new Object();
-        message.type = 'Chat';
-        message.text = text;
-        message.subType = 'NewChat';
-
-        rtcStarClient.request(message);
+      this.sendChat = function(text){
+        rtcStarClient.request("chat.requestNewChat", text);
       }
 
-      //  When client is started
-      function openHandler(peerId){
-        if (delegate != undefined)
-          delegate.onOpen(peerId);
-      }
-      
-      //  When received a chat message
-      function chatHandler(message){
-        if (delegate != undefined)
-          delegate.onMessage(message);
-      }
+      rtcStarClient.on('chat.init', function(message){
+        if (_this.initHandler)
+          _this.initHandler(message);
+      });
+      rtcStarClient.on('chat.newChat', function(message){
+        if (_this.newChatHandler)
+          _this.newChatHandler(message);
+      });
+      rtcStarClient.on('$close', function(message){
+        if (_this.disableChatHandler)
+          _this.disableChatHandler(message);
+      });
+      rtcStarClient.on('$error', function(message){
+        if (_this.disableChatHandler)
+          _this.disableChatHandler(message);
+      });
     }
 
 Server Component for chat:
 
-    var ChatWidgetServer = function(rtcStarServer){
+    var ChatServer = function(rtcStarServer){
+
       var history;
-      rtcStarServer.onServerEvent('Open', init);
-      rtcStarServer.onServerEvent('ClientEnter', initClient);
-      rtcStarServer.onRequest('Chat', newChat);        //        Listen to Chat requests
       
-      //        When server starts
-      function init(serverId){
-              history = [];
+      function init(){
+        history = [];
+      }
+      
+      function initClient(message){
+        var id = message.id;
+
+        if (history)
+          rtcStarServer.send(id, "chat.init", history);
+      }
+      
+      function newChat(message){
+        var chat = {clientId: message.clientId, content: message.data, timestamp: new Date()};
+        history.push(chat);
+        rtcStarServer.broadcast("chat.newChat", chat);
       }
 
-      //        When a new user enters, we send the chat history
-      function initClient(peerId){
-              var message = new Object();
-              message.type = 'Chat';
-              message.subType = 'Init';
-              message.data = history;
-              rtcStarServer.send(peerId, message);
-      }
-      
-      //        When receiving a new chat, we store the message and broadcast it
-      function newChat(message){
-              //storing history of chat 
-              history.push(message);
-              rtcStarServer.broadcast(message);
-      }
+      rtcStarServer.on('$open', init);
+      rtcStarServer.on('$enter', initClient);
+      rtcStarServer.on('chat.requestNewChat', newChat);
     }
 
 
-
-
-[Demo](http://rtcstarjs.com/ChatDemo.html)
