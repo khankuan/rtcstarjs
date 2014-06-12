@@ -45,11 +45,13 @@ Init Client code
 var client = new RtcStarClient(); 
 
 //  Events are standardised, such as ClientEnter, ClientLeave
-client.onClientEvent('Open',function(client_id) {
+client.onClientEvent('Open', function(client_id) {
+    //  Your code here
 });
 
 //  Messages can be any type, used for application communication
-client.onMessage('Chat',function(message) {
+client.onMessage('Chat', function(message) {
+    // Your code here
 });
 
 client.start(server_id);
@@ -64,7 +66,7 @@ var ChatWidgetClient = function(rtcStarClient) {
 
     var delegate;
     rtcStarClient.onClientEvent('Open', openHandler);
-    rtcStarClient.onMessage('Chat', chatHandler); //  Register listener to Chat
+    rtcStarClient.onMessage('Chat', chatHandler);   //  Register listener to Chat
     
     //  To delegate task of updating the view
     this.setdelegate = function(d) {
@@ -104,7 +106,7 @@ var ChatWidgetServer = function(rtcStarServer) {
     var history;
     rtcStarServer.onServerEvent('Open', init);
     rtcStarServer.onServerEvent('ClientEnter', initClient);
-    rtcStarServer.onRequest('Chat', newChat);        //        Listen to Chat requests
+    rtcStarServer.onRequest('Chat', newChat);        // Listen to Chat requests
       
     //  When server starts
     function init(serverId) {
