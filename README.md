@@ -28,11 +28,11 @@ Init Server code
 var server = new RtcStarServer(); 
     
 //  Events are standardised, such as ClientEnter, ClientLeave
-server.onServerEvent('Open',function(server_id){
+server.onServerEvent('Open',function(server_id) {
 });
 
 //  Requests can be any type, used for application communication
-server.onServerRequest('Chat',function(request){
+server.onServerRequest('Chat',function(request) {
 });
 
 //  All set, start server
@@ -45,11 +45,11 @@ Init Client code
 var client = new RtcStarClient(); 
 
 //  Events are standardised, such as ClientEnter, ClientLeave
-client.onClientEvent('Open',function(client_id){
+client.onClientEvent('Open',function(client_id) {
 });
 
 //  Messages can be any type, used for application communication
-client.onMessage('Chat',function(message){
+client.onMessage('Chat',function(message) {
 });
 
 client.start(server_id);
