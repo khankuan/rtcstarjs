@@ -29,6 +29,11 @@ function RTCStarClient(){
       for (var i in _this._eventHandlers[eventType])
         _this._eventHandlers[eventType][i](message);
   }
+
+    //  Add timestamp
+  _this._triggerSystemEvent = function(eventType, message){
+    _this._triggerEvent(eventType, {data: message, timestamp: new Date()});
+  }
 }
 
 
@@ -80,26 +85,27 @@ RTCStarClient.prototype.start = function(serverPeerId, id, options){
     if (_this.debug)
       console.log("Client connected to server",_this._clientPeer.id, serverPeerId);
     
-    _this._triggerEvent("$open", _this._clientPeer.id);
+    _this._triggerSystemEvent("$open", {id: _this._clientPeer.id});
   }
 
     //  Client Close
   function closeHandler(){
     if (_this.debug)
-      console.log("Client closed, id: "+_this._clientPeer.id, _this_.serverPeerId);
+      console.log("Client closed, id: "+_this._clientPeer.id, serverPeerId);
 
-    _this._triggerEvent("$close");
+    _this._triggerSystemEvent("$close");
   }
 
     //  Client Error
   function errorHandler(err){
-    _this._triggerEvent("$error", err);
+    _this._triggerSystemEvent("$error", err);
   }
 
   //  Client Data
   function dataHandler(message){
+    message = JSON.parse(message);
     if (_this.debug)
-      console.log(message);
+      console.log("Data", message);
 
     //  Trigger
     _this._triggerEvent(message.type, message);
@@ -148,7 +154,7 @@ RTCStarClient.prototype.request = function(type, data){
   if (this.debug)
     console.log("Request", message);
 
-  this._serverConnection.send(message);
+  this._serverConnection.send(JSON.stringify(message));
 }
 
 
