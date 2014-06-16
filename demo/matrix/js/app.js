@@ -4,7 +4,7 @@ var startedTaskTime;
 var matrixMulServer;
 var rtcStarServer;
 var size;
-var local = false;
+var local = true;
 
 
 //  Init click handlers
