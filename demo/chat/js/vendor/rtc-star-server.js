@@ -24,9 +24,17 @@ function RTCStarServer(){
 
   //  Trigger event handlers for an event
   _this._triggerEvent = function(eventType, message){
+    if (_this.debug)
+      console.log("Trigger", eventType, message)
+
     if (_this._eventHandlers[eventType])
       for (var i in _this._eventHandlers[eventType])
         _this._eventHandlers[eventType][i](message);
+  }
+
+  //  Add timestamp
+  _this._triggerSystemEvent = function(eventType, message){
+    _this._triggerEvent(eventType, {data: message, timestamp: new Date()});
   }
 
 };
@@ -54,18 +62,18 @@ RTCStarServer.prototype.start = function(id, options){
     _this._connections = {};
     
     //  Trigger
-    _this._triggerEvent("$open", {serverId: _this._serverPeer.id});
+    _this._triggerSystemEvent("$open", {serverId: _this._serverPeer.id});
   }
 
 
   //  PeerJS Close
   function peerjsCloseHandler(){
-    _this._triggerEvent("$close");
+    _this._triggerSystemEvent("$close");
   }
 
   //  PeerJS Error
   function peerjsErrorHandler(err){
-    _this._triggerEvent("$error");
+    _this._triggerSystemEvent("$error");
   }
 
   //  PeerJS Connection
@@ -83,7 +91,7 @@ RTCStarServer.prototype.start = function(id, options){
       _this._connections[id] = conn;
 
       //  Enter handler
-      _this._triggerEvent("$enter", {id: id});
+      _this._triggerSystemEvent("$enter", {id: id});
 
       //  Send user list with ids to new connection
       _this.send(id, "$list", {ids: Object.keys(_this._connections)});
@@ -92,6 +100,7 @@ RTCStarServer.prototype.start = function(id, options){
       
       //  Connection Data
       conn.on('data', function(request){
+        request = JSON.parse(request);
         if (_this.debug)
           console.log(request);
 
@@ -107,7 +116,7 @@ RTCStarServer.prototype.start = function(id, options){
         delete _this._connections[id];
 
         //  Trigger
-        _this._triggerEvent("$leave", {id: id});
+        _this._triggerSystemEvent("$leave", {id: id});
 
         //  Notify
         _this.broadcast("$leave", {id: id});
@@ -162,7 +171,7 @@ RTCStarServer.prototype.send = function(peerId, type, data){
     data: data,
     type: type
   };
-  this._connections[peerId].send(message);
+  this._connections[peerId].send(JSON.stringify(message));
 }
 
 //  Broadcast a message to all connected clients
@@ -173,7 +182,7 @@ RTCStarServer.prototype.broadcast = function(type, data){
     type: type
   }
   for (var i in this._connections)
-    this._connections[i].send(message);
+    this._connections[i].send(JSON.stringify(message));
 }
 
 
@@ -185,8 +194,6 @@ RTCStarServer.prototype.getServerPeerId = function(){
 
 //  Returns the list of connected clients
 RTCStarServer.prototype.getClientList = function(){
-  var clientList = this._connections.map(function(conn){
-    return conn.peer;
-  });
+  var clientList = Object.keys(this._connections)
   return clientList;
 }

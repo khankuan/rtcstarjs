@@ -7,8 +7,8 @@ var ChatServer = function(rtcStarServer){
 	}
 	
 	function initClient(message){
-		var id = message.id;
-
+		var id = message.data.id;
+		
 		if (history)
 			rtcStarServer.send(id, "chat.init", history);
 	}
