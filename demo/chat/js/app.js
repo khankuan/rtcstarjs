@@ -1,4 +1,7 @@
 
+var local = true;
+
+
 //  Init click handlers
 function startServerClicked(){
   startServer($("#startServerName").val())
@@ -19,7 +22,10 @@ function startServer(name){
   rtcStarServer.debug = true;
   var chatServer = new ChatServer(rtcStarServer);
 
-  rtcStarServer.start(name, {key: "ee56xhnb894ibe29", debug: 3});
+  if (local)
+    rtcStarServer.start(name, {key: "ee56xhnb894ibe29", debug: 3, host: "127.0.0.1", port: 5000});
+  else
+    rtcStarServer.start(name, {key: "ee56xhnb894ibe29"});
 }
 
 //  Become a client, join a server
@@ -89,5 +95,8 @@ function startClient(name){
   });
 
   //  Start
-  rtcStarClient.start(name, {key: "ee56xhnb894ibe29"});
+  if (local)
+    rtcStarClient.start(name, {key: "ee56xhnb894ibe29", debug: 3, host: "127.0.0.1", port: 5000});
+  else
+    rtcStarClient.start(name, {key: "ee56xhnb894ibe29"});
 }
