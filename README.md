@@ -113,3 +113,69 @@ Server Component for chat:
     }
 
 
+
+
+API
+=========
+Server API:
+
+    start(id, options): Start server with id and options, both params are used in PeerJS's Peer constructor.
+
+    stop(): Stops and destroy the server.
+
+    on(type, handler): Add a handler function to a particular event of [type]. (Sent from client, or system events)
+
+    off(type, handler): Removes a handler function to a particular event of [type]. (Sent from client, or system events)
+
+    send(peerId, type, data): Sends a message to a specific peer. The RTCStartClient would trigger an event of [type] with the supplied data.
+
+    broadcast(type, data): Same as the send method, except that message is broadcast to all clients connected.
+
+    getServerPeerId(): Returns the id of the server.
+
+    getClientList(): Returns a list of ids of clients that are connected to the server.
+
+Server System Events:
+    
+    $open: Server started.
+
+    $close: Server ended.
+
+    $error: Error occured.
+
+    $enter: Client enter.
+
+    $leave: Client left.
+
+
+Client API:
+
+    start(serverPeerId, id, options): Start client with id and options, both params are used in PeerJS's Peer constructor, and connects to a server with the serverPeerId provided.
+
+    stop(): Stops and destroy the client.
+
+    on(type, handler): Add a handler function to a particular event of [type]. (Sent from client, or system events)
+
+    off(type, handler): Removes a handler function to a particular event of [type]. (Sent from client, or system events)
+
+    request(type, data): Sends a request to server of [type] with the supplied data.
+
+    getClientPeerId(): Returns the id of the client.
+
+    call(peerId, stream): Starts a webrtc media call with a particular client.
+
+Client System Events:
+    
+    $open: Client started.
+
+    $close: Client ended.
+
+    $error: Error occured.
+
+    $enter: Client enter.
+
+    $leave: Client left.
+
+    $list: List of connected clients. Sent only at initial connection.
+
+    $call: Received a webrtc media call from a client.
