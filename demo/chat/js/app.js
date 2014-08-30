@@ -1,5 +1,5 @@
 
-var local = true;
+var local = false;
 
 
 //  Init click handlers

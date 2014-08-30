@@ -98,12 +98,13 @@ RTCStarClient.prototype.start = function(serverPeerId, id, options){
 
     //  Client Error
   function errorHandler(err){
+    if (_this.debug)
+      console.log("Client error, id: "+_this._clientPeer.id, serverPeerId);
     _this._triggerSystemEvent("$error", err);
   }
 
   //  Client Data
   function dataHandler(message){
-    message = JSON.parse(message);
     if (_this.debug)
       console.log("Data", message);
 
@@ -154,7 +155,10 @@ RTCStarClient.prototype.request = function(type, data){
   if (this.debug)
     console.log("Request", message);
 
-  this._serverConnection.send(JSON.stringify(message));
+  var _this = this;
+  setTimeout(function(){
+    _this._serverConnection.send(message);
+  },0);
 }
 
 

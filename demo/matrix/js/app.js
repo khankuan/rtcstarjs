@@ -4,12 +4,12 @@ var startedTaskTime;
 var matrixMulServer;
 var rtcStarServer;
 var size;
-var local = true;
+var local = false;
 
 
 //  Init click handlers
 function startServerClicked(){
-  size = parseInt($("#dataSize").val() || 800);
+  size = parseInt($("#dataSize").val() || 100);
   startServer($("#startServerName").val(), size);
 }
 

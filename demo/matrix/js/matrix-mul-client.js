@@ -37,7 +37,7 @@ function MatrixMulClient(rtcStarClient){
 			};
 			dataReceived = false;
 			workStarted = false;
-			_this.logHandler("Completed Task of size " + (data.rowEndExclusive - data.rowStart) + ", took "+timeTaken + " seconds");
+			_this.logHandler("Completed task of size " + (data.rowEndExclusive - data.rowStart) + ", took "+timeTaken + " seconds");
 			rtcStarClient.request("matrixmul.taskCompleted", message);
 		},0);
 	});
