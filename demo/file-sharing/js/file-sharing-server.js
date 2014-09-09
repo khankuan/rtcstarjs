@@ -3,7 +3,7 @@ var FileSharingServer = function(rtcStarServer){
 	var files;
 	var filesData;
 	var _this = this;
-	this.bufferSize = 600000;
+	this.bufferSize = 1024*1024+800000;
 	
 	function init(){
 		files = {};	//	name: (name, data, size)
@@ -33,30 +33,21 @@ var FileSharingServer = function(rtcStarServer){
 	function newFile(message){
 		var clientId = message.clientId;
 		var name = message.data.name;
+		var chunk = message.data.chunk;
 
 		var reader = new FileReader();
 		reader.onload = function(e){
 			if (e.target.readyState == 2){
-				console.log("Loaded " + files[name].size + " bytes")
-
-				var total = Math.ceil(e.target.result.byteLength / _this.bufferSize);
-				for (var i = 0; i < total; i++){
-					var data = e.target.result.slice(i*_this.bufferSize, (i+1)*_this.bufferSize);
-					rtcStarServer.send(clientId, "file.downloadFile", {file: fileMeta(files[name]), data: data, chunk: i, total: total});
-				}
+				var data = e.target.result;
+				rtcStarServer.send(clientId, "file.downloadFile", {file: fileMeta(files[name]), data: data, chunk: chunk, total: Math.ceil(files[name].size / _this.bufferSize)});
 			}
 		}
-		reader.readAsArrayBuffer(files[name]);
+		reader.readAsArrayBuffer(files[name].slice(chunk * _this.bufferSize, (chunk+1) * _this.bufferSize));
 	}
 
 	rtcStarServer.on('$open', init);
 	rtcStarServer.on('$enter', initClient);
 	rtcStarServer.on('file.requestNewFile', newFile);
-
-	//	Load file
-	function loadFile(){
-
-	}
 
 	//	Methods
 	this.addFile = function(file){

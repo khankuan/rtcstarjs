@@ -8,7 +8,7 @@ function FileSharingClient(rtcStarClient){
 	var startTime = {};
 
 	this.download = function(name){
-		rtcStarClient.request("file.requestNewFile", {name: name});
+		rtcStarClient.request("file.requestNewFile", {name: name, chunk: 0});
 		startTime[name] = new Date();
 	}
 
@@ -44,6 +44,8 @@ function FileSharingClient(rtcStarClient){
 		    delete buffer[message.data.file.name];
 		    delete startTime[message.data.file.name];
 		    delete chunksCount[message.data.file.name];
+		} else {
+			rtcStarClient.request("file.requestNewFile", {name: message.data.file.name, chunk: message.data.chunk + 1});
 		}
 	});
 }
