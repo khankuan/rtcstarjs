@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+   <title>Matrix</title>
+ 
+</head>
+
+
+<body>
+  <div>
+    Server<br>
+    <input id="startServerName" placeholder="Server Name" value="heyhey"></input><input id="dataSize" placeholder="Size of Matrix"></input><button onclick="startServerClicked()">Start server</button><br>
+    <button onclick="doTaskAlone()">Do Task Alone</button><br>
+    <button onclick="distributeDataClicked()">Distribute Data</button><br>
+    <button onclick="startTaskClicked()">Start</button><br>
+    <div id="clients">
+      Clients:<br>
+    </div>
+  </div>
+
+  <br>
+
+  <div>
+    Client<br>
+    <input id="joinServerName" placeholder="Server Name" value="heyhey"></input><button onclick="startClientClicked()">Join Server</button><br>
+  </div>
+
+
+  <div id="logs">
+  </div>
+
+
+  <!-- JS -->
+  <script src="js/vendor/jquery-2.0.3.min.js"></script>
+  <script src="js/vendor/adapter.js"></script>
+  <script src="js/vendor/peer.js"></script>
+  <script src="js/vendor/rtc-star-server.js"></script>
+  <script src="js/vendor/rtc-star-client.js"></script>
+  <script src="js/helpers.js"></script>
+  <script src="js/matrix-mul-server.js"></script>
+  <script src="js/matrix-mul-client.js"></script>
+  <script src="js/app.js"></script>
+
+
+</body>
+</html>

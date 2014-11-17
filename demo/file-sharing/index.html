@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+   <title>File Sharing</title>
+ 
+</head>
+
+
+<body>
+  <div>
+    Start a file hosting server: 
+    <input id="startServerName" value="heyhey"></input>
+    <button onclick="startServerClicked()">Start</button>
+    <br>
+
+    <button onclick="$('#fileUpload').click();">Add Files</button>
+    <input type="file" id="fileUpload" multiple style="display: none"></input>
+    <br>
+    
+    Hosted File List:
+    <div id="server-files">
+    </div>
+
+
+    <br>
+  </div>
+
+  <br>
+  <br>
+  ----------------------------------------------------------------------------------------------
+  <br>
+  <br>
+
+  <div>
+    Join a file hosting server: 
+    <input id="joinServerName" value="heyhey"></input>
+    <button onclick="joinServerClicked()">Join</button>
+    <br>
+
+    Available Files:
+    <div id="client-files">
+    </div>
+
+    <br>
+
+    <div id="client-progress">
+    </div>
+
+    <div id="limbo" style="display: none;"></div>
+    <br>
+  </div>
+
+
+  <!-- JS -->
+  <script src="js/vendor/jquery-2.0.3.min.js"></script>
+  <script src="js/vendor/adapter.js"></script>
+  <script src="js/vendor/peer.js"></script>
+  <script src="js/vendor/rtc-star-server.js"></script>
+  <script src="js/vendor/rtc-star-client.js"></script>
+  <script src="js/file-sharing-server.js"></script>
+  <script src="js/file-sharing-client.js"></script>
+  <script src="js/app.js"></script>
+
+
+</body>
+</html>
